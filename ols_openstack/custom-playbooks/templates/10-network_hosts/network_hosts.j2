@@ -1,0 +1,7 @@
+# neutron server, agents (L3, etc)
+network_hosts:
+{% for networkIP in networkIP %}
+  {{networkHostName}}{% if loop.index | int < 10  %}0{% endif %}{{loop.index}}:
+    ip: {{networkIP}}
+{% endfor %}
+

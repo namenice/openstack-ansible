@@ -1,0 +1,8 @@
+# load balancer
+
+haproxy_hosts:
+{% for controllerIP in controllerIP %}
+  {{controllerHostName}}{% if loop.index | int < 10  %}0{% endif %}{{loop.index}}:
+    ip: {{controllerIP}}
+{% endfor %}
+

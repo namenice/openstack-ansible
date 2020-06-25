@@ -1,0 +1,7 @@
+# nova hypervisors
+compute_hosts:
+{% for computeIP in computeIP %}
+  {{computeHostName}}{% if loop.index | int < 10  %}0{% endif %}{{loop.index}}:
+    ip: {{computeIP}}
+{% endfor %}
+

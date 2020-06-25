@@ -1,0 +1,7 @@
+# nova hypervisors
+compute_hosts:
+  compute01:
+    ip: 10.11.13.20
+  compute02:
+    ip: 10.11.13.22
+

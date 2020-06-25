@@ -1,0 +1,65 @@
+- hosts: 127.0.0.1
+  vars_files:
+    - ./var.yml
+  tasks:
+
+  - name: Creating shared-infra_hosts
+    template:
+      src: ./01-shared-infra_hosts/shared-infra_hosts.j2
+      dest: ./00-file/01-shared-infra_hosts.yml
+
+  - name: Creating repo-infra_hosts
+    template:
+      src: ./02-repo-infra_hosts/repo-infra_hosts.j2
+      dest: ./00-file/02-repo-infra_hosts.yml
+
+  - name: Creating haproxy_hosts
+    template:
+      src: ./03-haproxy_hosts/haproxy_hosts.j2
+      dest: ./00-file/03-haproxy_hosts.yml
+
+  - name: Creating identity_hosts
+    template:
+      src: ./04-identity_hosts/identity_hosts.j2
+      dest: ./00-file/04-identity_hosts.yml
+
+  - name: Creating storage-infra_hosts
+    template:
+      src: ./05-storage-infra_hosts/storage-infra_hosts.j2
+      dest: ./00-file/05-storage-infra_hosts.yml
+
+  - name: Creating image_hosts
+    template:
+      src: ./06-image_hosts/image_hosts.j2
+      dest: ./00-file/06-image_hosts.yml
+
+  - name: Creating compute-infra_hosts
+    template:
+      src: ./07-compute-infra_hosts/compute-infra_hosts.j2
+      dest: ./00-file/07-compute-infra_hosts.yml
+
+  - name: Creating orchestration_hosts
+    template:
+      src: ./08-orchestration_hosts/orchestration_hosts.j2
+      dest: ./00-file/08-orchestration_hosts.yml
+
+  - name: Creating dashboard_hosts
+    template:
+      src: ./09-dashboard_hosts/dashboard_hosts.j2
+      dest: ./00-file/09-dashboard_hosts.yml
+
+  - name: Creating network_hosts
+    template:
+      src: ./10-network_hosts/network_hosts.j2
+      dest: ./00-file/10-network_hosts.yml
+
+  - name: Creating compute_hosts
+    template:
+      src: ./11-compute_hosts/compute_hosts.j2
+      dest: ./00-file/11-compute_hosts.yml
+
+#  - name: Creating storage_hosts
+#    template:
+#      src: ./12-storage_hosts/storage_hosts.j2
+#      dest: ./00-file/12-storage_hosts.yml
+
