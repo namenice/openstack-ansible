@@ -1,6 +1,1 @@
-ols_openstack/ansible-role-requirements*
-ols_openstack/ols_playbooks/prometheus-docker/*
-ols_openstack/ols_playbooks/setup-galera.yml
-ols_openstack/ols_playbooks/setup-monitor.yml
-ols_openstack/ols_playbooks/billing-file
 openstack-ansible/*

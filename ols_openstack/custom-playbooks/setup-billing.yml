@@ -1,3 +1,0 @@
----
-- include: setup-billing-cinder.yml
-- include: setup-billing-nova.yml
