@@ -1,4 +1,5 @@
 [submodule "openstack-ansible"]
-        path = openstack-ansible
-        url = https://github.com/openstack/openstack-ansible.git
+	path = openstack-ansible
+	url = https://github.com/openstack/openstack-ansible.git
+	branch = master
 
