@@ -1,0 +1,29 @@
+---
+#Be verify
+path_ssl_cert: /opt/ols-openstack-ansible/ols_openstack/config-openstack/ssl/openlandscape.cloud.cert
+path_ssl_key: /opt/ols-openstack-ansible/ols_openstack/config-openstack/ssl/server.key
+
+keystone_ssl: true
+keystone_user_ssl_cert: "{{ path_ssl_cert }}"
+keystone_user_ssl_key: "{{ path_ssl_key }}"
+keystone_user_ssl_ca_cert: "{{ path_ssl_cert }}"
+keystone_ssl_protocol: TLSv1 TLSv1.1 TLSv1.2
+
+horizon_ssl: true
+horizon_user_ssl_cert: "{{ path_ssl_cert }}"
+horizon_user_ssl_key: "{{ path_ssl_key }}"
+horizon_user_ssl_ca_cert: "{{ path_ssl_cert }}"
+
+haproxy_user_ssl: true
+haproxy_user_ssl_cert: "{{ path_ssl_cert }}"
+haproxy_user_ssl_key: "{{ path_ssl_key }}"
+haproxy_user_ssl_ca_cert: "{{ path_ssl_cert }}"
+
+#nova_ssl: true
+nova_console_user_ssl_cert: "{{ path_ssl_cert }}"
+nova_console_user_ssl_key: "{{ path_ssl_key }}"
+nova_console_user_ssl_ca_cert: "{{ path_ssl_cert }}"
+
+#nova_console_ssl_cert: "{{ path_ssl_cert }}"
+#nova_console_ssl_key: "{{ path_ssl_key }}"
+

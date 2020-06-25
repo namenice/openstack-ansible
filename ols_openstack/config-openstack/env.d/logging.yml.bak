@@ -1,0 +1,60 @@
+---
+# Copyright 2014, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+component_skel:
+  elasticsearch:
+    belongs_to:
+      - elasticsearch_all
+  kibana:
+    belongs_to:
+      - kibana_all
+  logstash:
+    belongs_to:
+      - logstash_all
+
+
+container_skel:
+  kibana_container:
+    belongs_to:
+      - logging_containers
+    contains:
+      - kibana
+    properties:
+      is_metal: true
+      service_name: kibana
+  logstash_container:
+    belongs_to:
+      - logging_containers
+    contains:
+      - logstash
+    properties:
+      is_metal: true
+      service_name: logstash
+  elasticsearch_container:
+    belongs_to:
+      - logging_containers
+    contains:
+      - elasticsearch
+    properties:
+      is_metal: true
+      service_name: elasticsearch
+
+physical_skel:
+  logging_containers:
+    belongs_to:
+      - all_containers
+  logging_hosts:
+    belongs_to:
+      - hosts

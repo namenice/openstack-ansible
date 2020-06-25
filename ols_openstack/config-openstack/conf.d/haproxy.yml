@@ -1,0 +1,21 @@
+---
+## Haproxy Host
+haproxy_hosts:
+  controller1:
+    ip: 10.2.0.1
+  controller2:
+    ip: 10.2.0.2
+  controller3:
+    ip: 10.2.0.3
+
+haproxy-external_hosts:
+  proxy1:
+    ip: 10.2.0.71
+  proxy2:
+    ip: 10.2.0.72
+
+haproxy-monlog_hosts:
+  log1:
+    ip: 10.2.0.61
+  log2:
+    ip: 10.2.0.62

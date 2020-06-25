@@ -1,6 +1,6 @@
 - hosts: 127.0.0.1
   vars_files:
-    - ./var.yml
+    - ../config-openstack/user_01_ip.yml
   tasks:
 
   - name: Creating shared-infra_hosts

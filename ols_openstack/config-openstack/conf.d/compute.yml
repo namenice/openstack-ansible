@@ -1,0 +1,79 @@
+---
+## Compute Host
+compute_hosts:
+  compute1:
+    ip: 10.2.0.21
+    container_vars:
+      nova_nova_conf_overrides:
+        DEFAULT:
+          default_availability_zone: TH-SRB
+          # vcpu_pin_set: 2-15
+      neutron_l3_agent_ini_overrides:
+        agent:
+          availability_zone: TH-SRB
+
+  compute2:
+    ip: 10.2.0.22
+    container_vars:
+      nova_nova_conf_overrides:
+        DEFAULT:
+          default_availability_zone: TH-SRB
+          # vcpu_pin_set: 2-15
+      neutron_l3_agent_ini_overrides:
+        agent:
+          availability_zone: TH-SRB
+
+  compute3:
+   ip: 10.2.0.23
+   container_vars:
+     nova_nova_conf_overrides:
+       DEFAULT:
+         default_availability_zone: TH-SRB
+        #  vcpu_pin_set: 2-15
+     neutron_l3_agent_ini_overrides:
+       agent:
+         availability_zone: TH-SRB
+
+  compute4:
+   ip: 10.2.0.24
+   container_vars:
+     nova_nova_conf_overrides:
+       DEFAULT:
+         default_availability_zone: TH-SRB
+        #  vcpu_pin_set: 2-15
+     neutron_l3_agent_ini_overrides:
+       agent:
+         availability_zone: TH-SRB
+
+  compute5:
+   ip: 10.2.0.25
+   container_vars:
+     nova_nova_conf_overrides:
+       DEFAULT:
+         default_availability_zone: TH-SRB
+        #  vcpu_pin_set: 2-15
+     neutron_l3_agent_ini_overrides:
+       agent:
+         availability_zone: TH-SRB
+
+  compute6:
+   ip: 10.2.0.26
+   container_vars:
+     nova_nova_conf_overrides:
+       DEFAULT:
+         default_availability_zone: TH-SRB
+        #  vcpu_pin_set: 2-15
+     neutron_l3_agent_ini_overrides:
+       agent:
+         availability_zone: TH-SRB
+
+  compute7:
+   ip: 10.2.0.27
+   container_vars:
+     nova_nova_conf_overrides:
+       DEFAULT:
+         default_availability_zone: TH-SRB
+        #  vcpu_pin_set: 2-15
+     neutron_l3_agent_ini_overrides:
+       agent:
+         availability_zone: TH-SRB

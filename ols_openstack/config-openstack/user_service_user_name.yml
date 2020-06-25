@@ -1,0 +1,33 @@
+---
+keystone_admin_user_name: admin
+keystone_admin_tenant_name: admin
+
+openrc_os_username: "{{ keystone_admin_user_name }}"
+openrc_os_tenant_name: "{{ keystone_admin_tenant_name }}"
+
+keystone_service_user_name: keystone
+
+cinder_service_user_name: cinder
+
+glance_service_user_name: glance
+
+nova_service_user_name: nova
+
+neutron_service_user_name: neutron
+
+#swift_service_user_name: swift
+
+#magnum_service_user_name: magnum
+
+#barbican_service_user_name: barbican
+
+#gnocchi_service_user_name: gnochi
+
+nova_placement_service_username: nova_placement
+
+heat_service_user_name: heat
+
+#ceilometer_service_user_name: ceilometer
+
+#aodh_service_user_name: aodh
+

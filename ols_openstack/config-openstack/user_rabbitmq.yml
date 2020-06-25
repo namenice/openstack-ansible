@@ -1,0 +1,17 @@
+---
+rabbitmq_plugins:
+  - name: rabbitmq_management
+    state: enabled
+
+#  - name: prometheus_process_collector
+#    state: enabled
+
+#  - name: prometheus
+#    state: enabled
+
+#  - name: prometheus_httpd
+#    state: enabled
+
+#  - name: prometheus_rabbitmq_exporter
+#    state: enabled
+

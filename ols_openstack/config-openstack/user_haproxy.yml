@@ -1,0 +1,40 @@
+---
+## VIP on proxy
+haproxy_keepalived_external_interface: br-vfwpublic
+haproxy_keepalived_glance_external_interface: br-vfwpublic
+haproxy_keepalived_keystone_external_interface: br-vfwpublic
+haproxy_keepalived_nova_external_interface: br-vfwpublic
+haproxy_keepalived_cinder_external_interface: br-vfwpublic
+haproxy_keepalived_neutron_external_interface: br-vfwpublic
+haproxy_keepalived_console_external_interface: br-vfwpublic
+#haproxy_keepalived_app_external_interface: br-vfwpublic
+#haproxy_keepalived_swift_external_interface: br-vfwpublic
+
+## VIP on controller
+haproxy_keepalived_internal_interface: br-mgmt
+haproxy_keepalived_database_interface: br-mgmt
+haproxy_keepalived_monlog_interface: br-monlog
+#haproxy_keepalived_swift_internal_interface: br-mgmt
+
+
+## VIP on proxy
+haproxy_keepalived_external_vip_cidr: "{{ external_vip }}/32"
+
+## VIP on controller
+haproxy_keepalived_internal_vip_cidr: "{{ internal_vip }}/32"
+haproxy_keepalived_database_vip_cidr: "{{ database_vip }}/32"
+haproxy_keepalived_monlog_vip_cidr: "{{ monlog_vip }}/32"
+#haproxy_keepalived_swift_internal_vip_cidr: "{{ swift_internal_vip }}/32"
+
+haproxy_keepalived_internal_virtual_router_id: 101
+haproxy_keepalived_external_virtual_router_id: 102
+haproxy_keepalived_database_virtual_router_id: 103
+haproxy_keepalived_monlog_virtual_router_id: 104
+
+## Haproxy Stats
+haproxy_stats_enabled: True
+haproxy_stats_bind_address: "{{ internal_vip }}"
+haproxy_stats_port: 1936
+haproxy_username: admin
+
+keepalived_sync_groups: {}

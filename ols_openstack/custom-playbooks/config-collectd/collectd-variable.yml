@@ -1,0 +1,4 @@
+collectd_version:
+collectd_install_recommends:
+
+prometheus_endpoint_ip:

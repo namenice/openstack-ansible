@@ -1,8 +1,16 @@
-# load balancer
+## load balancer
 
+# proxy internal
 haproxy_hosts:
 {% for controllerIP in controllerIP %}
   {{controllerHostName}}{% if loop.index | int < 10  %}0{% endif %}{{loop.index}}:
     ip: {{controllerIP}}
 {% endfor %}
 
+
+# proxy external
+haproxy-external_hosts:
+{% for proxyExternalIP in proxyExternalIP %}
+  {{proxyExternalHostName}}{% if loop.index | int < 10  %}0{% endif %}{{loop.index}}:
+    ip: {{proxyExternalIP}}
+{% endfor %}

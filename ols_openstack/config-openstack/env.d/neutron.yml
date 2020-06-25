@@ -1,0 +1,54 @@
+---
+
+container_skel:
+  neutron_node_container:
+    belongs_to:
+      - network-node_containers
+    contains:
+      - neutron_agent
+      - neutron_metadata_agent
+      - neutron_metering_agent
+      - neutron_linuxbridge_agent
+      - neutron_openvswitch_agent
+      - neutron_l3_agent
+      - neutron_dhcp_agent
+      - neutron_bgp_dragent
+    properties:
+      service_name: neutron
+      is_metal: true
+  neutron_loadbalancer_container:
+    belongs_to:
+      - network-loadbalancer_containers
+    contains:
+      - neutron_lbaas_agent
+    properties:
+      service_name: neutron
+      is_metal: true
+  neutron_server_container:
+    belongs_to:
+      - network-server_containers
+    contains:
+      - neutron_server
+    properties:
+      service_name: neutron
+
+
+physical_skel:
+  network-server_containers:
+    belongs_to:
+      - all_containers
+  network-server_hosts:
+    belongs_to:
+      - hosts
+  network-node_containers:
+    belongs_to:
+      - all_containers
+  network-node_hosts:
+    belongs_to:
+      - hosts
+  network-loadbalancer_containers:
+    belongs_to:
+      - all_containers
+  network-loadbalancer_hosts:
+    belongs_to:
+      - hosts

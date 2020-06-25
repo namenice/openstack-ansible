@@ -1,0 +1,10 @@
+---
+# horizon
+dashboard_hosts:
+  controller1:
+    ip: 10.2.0.1
+  controller2:
+    ip: 10.2.0.2
+  controller3:
+    ip: 10.2.0.3
+

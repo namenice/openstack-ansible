@@ -14,6 +14,7 @@
 # limitations under the License.
 # (c) 2014, Kevin Carter <kevin.carter@rackspace.com>
 
+
 ## Vars ----------------------------------------------------------------------
 export ADMIN_PASSWORD=${ADMIN_PASSWORD:-"secrete"}
 export DEPLOY_AIO=${DEPLOY_AIO:-"no"}
@@ -63,4 +64,3 @@ function check_submodule_status {
       ;;
   esac
 }
-

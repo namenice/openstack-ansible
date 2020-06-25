@@ -1,0 +1,5 @@
+---
+
+- include: ../../openstack-ansible/playbooks/openstack-hosts-setup.yml
+- include: ../../openstack-ansible/playbooks/security-hardening.yml
+- include: ../../openstack-ansible/playbooks/containers-deploy.yml

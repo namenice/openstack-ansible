@@ -53,6 +53,17 @@ def get_config(path):
         # assume config is a dict
         return yaml.safe_load(data)
 
+
+def override_dicts(args):
+    base = {}
+    for override_file in args.overrides:
+        overrides = get_config(override_file)
+        if overrides is None:
+            continue
+        base = dict(base.items() + overrides.items())
+    return base
+
+
 def override_lists(args):
     base = []
     for override_file in args.overrides:
@@ -83,4 +94,3 @@ if __name__ == '__main__':
     if base:
         with open(args.destination, 'w') as f:
             f.write(str(yaml.safe_dump(base, default_flow_style=False)))
-

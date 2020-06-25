@@ -1,0 +1,13 @@
+ansible_facts/
+backup_openstack_inventory.tar
+openstack_hostnames_ips.yml
+user_secrets.yml*
+fetch/*
+ansible_facts/*
+ssl/*
+openstack_inventory.json
+backup_openstack_inventory.tar
+*.swp
+../playbooks/prometheus-docker/*
+../playbooks/setup-galera.yml
+../playbooks/setup-monitor.yml

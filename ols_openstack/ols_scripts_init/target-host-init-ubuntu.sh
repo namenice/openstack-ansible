@@ -7,4 +7,3 @@ apt install linux-image-extra-$(uname -r)
 echo 'bonding' >> /etc/modules
 echo '8021q' >> /etc/modules
 service ntp restart
-

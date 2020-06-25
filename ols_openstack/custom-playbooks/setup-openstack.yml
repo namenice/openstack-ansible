@@ -1,0 +1,31 @@
+---
+- include: ../../openstack-ansible/playbooks/os-keystone-install.yml
+  #- include: ceph-rgw-install.yml
+  #- include: os-barbican-install.yml
+- include: ../../openstack-ansible/playbooks/os-glance-install.yml
+- include: ../../openstack-ansible/playbooks/os-cinder-install.yml
+- include: ../../openstack-ansible/playbooks/os-nova-install.yml
+- include: ../../openstack-ansible/playbooks/os-neutron-install.yml
+- include: setup-ovs.yml
+- include: ../../openstack-ansible/playbooks/os-heat-install.yml
+- include: ../../openstack-ansible/playbooks/os-horizon-install.yml
+   #- include: ../../openstack-ansible/playbooks/os-ceilometer-install.yml
+   #- include: ../../openstack-ansible/playbooks/os-aodh-install.yml
+   #- include: ../../openstack-ansible/playbooks/os-designate-install.yml
+   #NOTE(stevelle) Ensure Gnocchi identities exist before Swift
+   #- include: ../../openstack-ansible/playbooks/os-gnocchi-install.yml
+   #  when:
+   #    - gnocchi_storage_driver is defined
+   #    - gnocchi_storage_driver == 'swift'
+   #  vars:
+   #    gnocchi_identity_only: True
+     #- include: ../../openstack-ansible/playbooks/os-swift-install.yml
+   #- include: ../../openstack-ansible/playbooks/os-gnocchi-install.yml
+   #- include: ../../openstack-ansible/playbooks/os-ironic-install.yml
+#- include: ../../openstack-ansible/playbooks/os-magnum-install.yml
+#- include: ../../openstack-ansible/playbooks/os-trove-install.yml
+#- include: ../../openstack-ansible/playbooks/os-barbican-install.yml
+   #- include: ../../openstack-ansible/playbooks/os-sahara-install.yml
+   #- include: ../../openstack-ansible/playbooks/os-tempest-install.yml
+   #  when: (tempest_install | default(False)) | bool or (tempest_run | default(False)) | bool
+

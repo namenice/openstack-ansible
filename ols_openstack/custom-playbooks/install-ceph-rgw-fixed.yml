@@ -1,0 +1,178 @@
+---
+# Copyright 2016, Logan Vig <logan2211@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Gather ceph-mon facts
+  hosts: ceph-mon
+  user: root
+  gather_facts: no
+  tasks:
+    - name: Gather ceph-mon facts
+      action: setup
+      tags:
+        - ceph-mon-facts
+  tags:
+    - ceph
+    - ceph-rgw
+
+- name: Install ceph rgw
+  hosts: ceph-rgw
+  max_fail_percentage: 20
+  user: root
+  pre_tasks:
+    - include: ../../openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-ceph"
+            dest: "/var/log/ceph"
+    - include: ../../openstack-ansible/playbooks/common-tasks/os-lxc-container-setup.yml
+      vars:
+        list_of_bind_mounts:
+          - bind_dir_path: "/var/lib/ceph"
+            mount_path: "/openstack/{{ inventory_hostname }}"
+    - include: ../../openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+
+    - name: Install distro packages
+      package:
+        name: "{{ item }}"
+        state: "{{ swift_package_state }}"
+      register: install_packages
+      until: install_packages|success
+      retries: 5
+      delay: 2
+      with_items: "{{ swift_distro_packages }}"
+
+    - name: Install Python library
+      pip:
+        name: python-keystoneclient
+
+    # Create a service
+    - name: Ensure swift service
+      keystone:
+        command: "ensure_service"
+        endpoint: "{{ keystone_service_adminurl }}"
+        login_user: "{{ keystone_admin_user_name }}"
+        login_password: "{{ keystone_auth_admin_password }}"
+        login_project_name: "{{ keystone_admin_tenant_name }}"
+        service_name: "{{ swift_service_name }}"
+        service_type: "{{ swift_service_type }}"
+        description: "{{ swift_service_description }}"
+        insecure: "{{ keystone_service_adminuri_insecure }}"
+      register: add_service
+      when: inventory_hostname == groups['ceph-rgw'][0]
+      until: add_service|success
+      retries: 5
+      delay: 2
+    # Create an admin user
+    - name: Ensure swift user
+      keystone:
+        command: "ensure_user"
+        endpoint: "{{ keystone_service_adminurl }}"
+        login_user: "{{ keystone_admin_user_name }}"
+        login_password: "{{ keystone_auth_admin_password }}"
+        login_project_name: "{{ keystone_admin_tenant_name }}"
+        user_name: "{{ swift_service_user_name }}"
+        tenant_name: "{{ swift_service_project_name }}"
+        password: "{{ swift_service_password }}"
+        insecure: "{{ keystone_service_adminuri_insecure }}"
+      register: add_service
+      when: inventory_hostname == groups['ceph-rgw'][0]
+      until: add_service|success
+      retries: 5
+      delay: 10
+
+    # Add a role to the user
+    - name: Ensure swift user to admin role
+      keystone:
+        command: "ensure_user_role"
+        endpoint: "{{ keystone_service_adminurl }}"
+        login_user: "{{ keystone_admin_user_name }}"
+        login_password: "{{ keystone_auth_admin_password }}"
+        login_project_name: "{{ keystone_admin_tenant_name }}"
+        user_name: "{{ swift_service_user_name }}"
+        tenant_name: "{{ swift_service_project_name }}"
+        role_name: "{{ swift_service_role_name }}"
+        insecure: "{{ keystone_service_adminuri_insecure }}"
+      register: add_service
+      when: inventory_hostname == groups['ceph-rgw'][0]
+      until: add_service|success
+      retries: 5
+      delay: 10
+
+    - name: Ensure swiftoperator role
+      keystone:
+        command: "ensure_role"
+        endpoint: "{{ keystone_service_adminurl }}"
+        login_user: "{{ keystone_admin_user_name }}"
+        login_password: "{{ keystone_auth_admin_password }}"
+        login_project_name: "{{ keystone_admin_tenant_name }}"
+        role_name: "{{ swift_operator_role }}"
+        insecure: "{{ keystone_service_adminuri_insecure }}"
+      register: add_service
+      when: inventory_hostname == groups['ceph-rgw'][0]
+      until: add_service|success
+      retries: 5
+      delay: 10
+
+    - name: Ensure swift endpoint
+      keystone:
+        command: "ensure_endpoint"
+        endpoint: "{{ keystone_service_adminurl }}"
+        login_user: "{{ keystone_admin_user_name }}"
+        login_password: "{{ keystone_auth_admin_password }}"
+        login_project_name: "{{ keystone_admin_tenant_name }}"
+        region_name: "{{ swift_service_region }}"
+        service_name: "{{ swift_service_name }}"
+        service_type: "{{ swift_service_type }}"
+        insecure: "{{ keystone_service_adminuri_insecure }}"
+        endpoint_list:
+          - url: "{{ swift_service_publicurl }}"
+            interface: "public"
+          - url: "{{ swift_service_internalurl }}"
+            interface: "internal"
+          - url: "{{ swift_service_adminurl }}"
+            interface: "admin"
+      register: add_service
+      when: inventory_hostname == groups['ceph-rgw'][0]
+      until: add_service|success
+      retries: 5
+      delay: 10
+
+
+  roles:
+    - role: ceph-defaults
+      tags:
+        - skip_ansible_lint
+    - role: ceph-common
+      tags:
+        - skip_ansible_lint
+    - role: ceph-config
+      tags:
+        - skip_ansible_lint
+    - role: ceph-rgw
+      tags:
+        - skip_ansible_lint
+    - role: rsyslog_client
+      rsyslog_client_log_rotate_file: ceph_log_rotate
+      rsyslog_client_log_dir: "/var/log/ceph"
+      rsyslog_client_config_name: "99-ceph-rsyslog-client.conf"
+      tags:
+        - rsyslog
+    - role: system_crontab_coordination
+      tags:
+        - crontab
+  environment: "{{ deployment_environment_variables | default({}) }}"
+  tags:
+    - ceph
+    - ceph-rgw

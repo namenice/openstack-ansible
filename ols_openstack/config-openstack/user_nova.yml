@@ -1,0 +1,65 @@
+---
+
+debug: False
+
+# Nova vnc&console
+nova_console_type: novnc
+nova_novncproxy_base_uri: "{{ nova_novncproxy_proto }}://{{ horizon_domain }}:{{ nova_novncproxy_port }}"
+nova_novncproxy_base_url: "{{ nova_novncproxy_base_uri }}/vnc_lite.html"
+novncproxy_base_url: "{{ nova_novncproxy_base_url }}"
+nova_novncproxy_git_repo: https://github.com/novnc/noVNC
+nova_novncproxy_git_install_branch: v1.0.0
+
+# Nova Scheduler
+nova_scheduler_default_filters: "RetryFilter,AvailabilityZoneFilter,AggregateMultiTenancyIsolation,AggregateImagePropertiesIsolation,AggregateInstanceExtraSpecsFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter"
+nova_scheduler_driver: filter_scheduler
+nova_scheduler_available_filters: nova.scheduler.filters.all_filters
+nova_scheduler_weight_classes: nova.scheduler.weights.all_weighers
+nova_pci_passthrough_whitelist: {}
+nova_default_schedule_zone: TH-SRB
+nova_cross_az_attach: False
+ 
+## nova compute
+nova_cpu_mode: host-model
+nova_virt_type: kvm
+nova_libvirt_inject_password: True
+nova_libvirt_disk_cachemodes: "network=writeback,block=none"
+nova_libvirt_inject_key: True
+nova_resume_guests_state_on_host_boot: True
+
+# Nova allocation
+nova_cpu_allocation_ratio: 4.0
+nova_ram_allocation_ratio: 1.0
+nova_disk_allocation_ratio: 1.0
+nova_max_instances_per_host: 500
+
+# Nova config overrides
+nova_nova_conf_overrides:
+  DEFAULT:
+    resize_confirm_window: 1
+    internal_service_availability_zone: TH-SRB
+    default_availability_zone: TH-SRB-PORTAL
+    ssl_only: False
+  libvirt:
+    live_migration_permit_auto_converge: True
+    block_migration_flag: VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_NON_SHARED_INC
+    vif_driver: nova.virt.libvirt.vif.LibvirtGenericVIFDriver
+  quota:
+    max_age: 3600
+    until_refresh: 5
+  compute:
+    consecutive_build_service_disable_threshold: 0
+
+#Set Nova can use Cinder Volume
+#nova_cinder_rbd_inuse: True
+
+nova_rpc_conn_pool_size: "{{ rpc_conn_pool_size }}"
+nova_rpc_response_timeout: "{{ rpc_response_timeout }}"
+nova_rpc_thread_pool_size: "{{ rpc_thread_pool_size }}"
+nova_db_max_overflow: "{{ db_max_overflow }}"
+nova_db_max_pool_size: "{{ db_max_pool_size }}"
+nova_db_pool_timeout: "{{ db_pool_timeout }}"
+nova_api_db_max_overflow: "{{ db_max_overflow }}"
+nova_api_db_max_pool_size: "{{ db_max_pool_size }}"
+nova_api_db_pool_timeout: "{{ db_pool_timeout }}"
+

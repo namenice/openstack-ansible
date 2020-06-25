@@ -1,0 +1,35 @@
+---
+horizon_domain: "yaoboo.openlandscape.cloud"
+public_ip_when_use_nat: "203.154.36.241"
+# external_domain: "192.168.10.191" # this domain must be resolved to external_vip
+#swift_external_domain: 'lab.openlandscape.cloud:9000'
+
+internal_vip: 10.2.0.81
+database_vip: 10.2.0.82
+monlog_vip: 10.5.0.83
+#swift_internal_vip: 10.2.0.28
+external_vip: 192.168.10.241
+
+keepalived_ping_address: 8.8.8.8
+
+# DB vip
+cinder_galera_address: "{{ database_vip }}"
+glance_galera_address: "{{ database_vip }}"
+horizon_galera_address: "{{ database_vip }}"
+keystone_galera_address: "{{ database_vip }}"
+neutron_galera_address: "{{ database_vip }}"
+nova_galera_address: "{{ database_vip }}"
+nova_api_galera_address: "{{ database_vip }}"
+nova_placement_galera_address: "{{ database_vip }}"
+#aodh_galera_address: "{{ database_vip }}"
+#barbican_galera_address: "{{ database_vip }}"
+#ceilometer_galera_address: "{{ database_vip }}"
+#designate_galera_address: "{{ database_vip }}"
+#gnocchi_galera_address: "{{ database_vip }}"
+heat_galera_address: "{{ database_vip }}"
+#ironic_galera_address: "{{ database_vip }}"
+#magnum_galera_address: "{{ database_vip }}"
+#rally_galera_address: "{{ database_vip }}"
+#sahara_galera_address: "{{ database_vip }}"
+#trove_galera_address: "{{ database_vip }}"
+#octavia_galera_address: "{{ database_vip }}"

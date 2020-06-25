@@ -1,0 +1,68 @@
+---
+# Neutron plugin
+neutron_plugin_base:
+  - router # default
+  - metering # default 
+  - qos
+  - dns
+#  - vpnaas
+#  - neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2
+
+# Neutron kernal module
+openstack_host_specific_kernel_modules:
+  - { name: "ebtables", pattern: "CONFIG_BRIDGE_NF_EBTABLES=", group: "network_hosts" }
+  - { name: "af_key", pattern: "CONFIG_NET_KEY=", group: "network_hosts" }
+  - { name: "ah4", pattern: "CONFIG_INET_AH=", group: "network_hosts" }
+  - { name: "ipcomp", pattern: "CONFIG_INET_IPCOMP=", group: "network_hosts" }
+  - { name: "openvswitch", pattern: "CONFIG_OPENVSWITCH=", group: "network_hosts" }
+
+### Neutron specific config
+neutron_plugin_type: "ml2.ovs" # ml2.ovs.dvr for distributed virtual router
+neutron_ml2_drivers_type: "vxlan,flat,vlan" # TODO: Switch vlan back
+neutron_vxlan_enabled: true
+neutron_l2_population: "True"
+neutron_vxlan_group: "239.1.1.1"
+neutron_provider_networks:
+  network_flat_networks: "*"
+  network_types: "vxlan"
+  network_vxlan_ranges: "2:65535"
+  network_vlan_ranges: "provider:1:4090"
+  network_mappings: "provider:br-provider" #mapping between netname and OVSBridge
+
+# Neutron metadata default is half of vCPU core
+neutron_metadata_workers: 16 # old is 8 
+
+#Set the default for Neutron-HA-tool to true
+neutron_legacy_ha_tool_enabled: false
+
+# Neutron scheduler
+# default neutron_driver_network_scheduler : neutron.scheduler.dhcp_agent_scheduler.WeightScheduler
+neutron_driver_network_scheduler: neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler
+neutron_driver_router_scheduler: neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler
+
+# Neutron DNS
+neutron_dns_domain: "srb.local"
+neutron_dnsmasq_dns_servers: "203.150.213.1,203.150.218.161"
+
+# Neutron config override
+neutron_neutron_conf_overrides:
+  DEFAULT:
+    global_physnet_mtu: 1550
+    dhcp_agents_per_network: 2
+    l3_ha: False
+    allow_automatic_l3agent_failover: True
+    default_availability_zones: TH-SRB
+    availability_zone: TH-SRB
+    router_distributed: False
+neutron_ml2_conf_ini_overrides:
+  ml2:
+    path_mtu: 1550
+
+neutron_api_workers: 64
+neutron_rpc_conn_pool_size: "{{ rpc_conn_pool_size }}"
+neutron_rpc_response_timeout: "{{ rpc_response_timeout }}"
+neutron_rpc_thread_pool_size: "{{ rpc_thread_pool_size }}"
+neutron_db_max_overflow: "{{ db_max_overflow }}"
+neutron_db_max_pool_size: "{{ db_max_pool_size }}"
+neutron_db_pool_timeout: "{{ db_pool_timeout }}"
+

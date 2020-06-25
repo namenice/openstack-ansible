@@ -1,0 +1,39 @@
+---
+horizon_session_timeout: 28800
+horizon_time_zone: Asia/Bangkok
+
+horizon_launch_instance_legacy: False #default
+horizon_launch_instance_ng: True #default
+
+nova_libvirt_inject_password: True
+horizon_can_set_password: True
+
+#Valid values are "direct", "legacy" (default) and "off". "off" disables the ability to upload images via Horizon. legacy enables local file upload by piping the image file through the Horizon’s web-server. direct sends the image file directly from the web browser to Glance.
+horizon_images_upload_mode: legacy
+horizon_enforce_password_check: True
+horizon_enable_password_retrieve: True
+horizon_enable_neutron_lbaas: False
+horizon_enable_cinder_backup: False
+horizon_enable_designate_ui: False
+horizon_enable_magnum_ui: False
+horizon_enable_sahara_ui: False
+horizon_keystone_multidomain_support: False
+#horizon_keystone_multidomain_support: True
+#horizon_keystone_default_domain: olscloud
+
+horizon_available_regions:
+  - { url: "{{ keystone_service_internalurl }}", name: "{{ service_region }}" }
+
+horizon_custom_uploads:
+  logo:
+    src: "/opt/ols-openstack-ansible/ols_openstack/config-openstack/logo-horizon/logo.svg"
+    dest: "img/logo.svg"
+  logo_splash:
+    src: "/opt/ols-openstack-ansible/ols_openstack/config-openstack/logo-horizon/logo_splash.svg"
+    dest: "img/logo-splash.svg"
+
+horizon_site_name: "OLS Cloud"
+
+horizon_dropdown_max_items: 500
+
+

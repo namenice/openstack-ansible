@@ -1,0 +1,40 @@
+---
+# Nova quota
+nova_quota_instances: 10 
+nova_quota_fixed_ips: 10
+nova_quota_metadata_items: 128
+nova_quota_cores: 200
+nova_quota_ram: 655360
+nova_quota_injected_file_content_bytes: 10240
+nova_quota_injected_file_path_length:  255
+nova_quota_injected_files: 5
+nova_quota_key_pairs: 10
+nova_quota_server_group_members: 10
+nova_quota_server_groups: 10
+
+## Quotas
+#neutron_default_quota: -1
+neutron_quota_floatingip: 10
+neutron_quota_port: 50
+neutron_quota_network: 10
+neutron_quota_router: 10
+neutron_quota_network_gateway: 10
+neutron_quota_security_group: 10
+neutron_quota_security_group_rule: 100
+neutron_quota_subnet: 10
+
+# Neutron LBaas
+#neutron_quota_health_monitor: 0
+#neutron_quota_member: 0
+#neutron_quota_packet_filter: 0
+#neutron_quota_pool: 0
+#neutron_quota_vip: 0
+
+## Cinder quota
+cinder_quota_volumes: 20
+cinder_quota_snapshots: 10
+cinder_quota_gigabytes: 6400
+cinder_quota_consistencygroups: 1000 # Be verify
+#cinder_quota_backups: 10
+#cinder_quota_backup_gigabytes: 1000
+

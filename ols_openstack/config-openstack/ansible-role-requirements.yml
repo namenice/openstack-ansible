@@ -1,0 +1,21 @@
+---
+# - name: ceph-rgw
+#   scm: git
+#   src: https://github.com/ceph/ansible-ceph-rgw
+#   version: v3.0.8
+- name: docker-ce
+  scm: git
+  src: https://github.com/zaxos/docker-ce-ansible-role.git
+  version: 1.1.0
+# - name: galera_client
+#   scm: git
+#   src: https://git.openstack.org/openstack/openstack-ansible-galera_client
+#   version: c95e68a4044db3a26c8874ee3705bed809467b39
+# - name: galera_server
+#   scm: git
+#   src: https://git.openstack.org/openstack/openstack-ansible-galera_server
+#   version: 04f834785228549b57b6342125ecea8c06dacf6a
+# - name: os_magnum
+#   scm: git
+#   src: https://git.openstack.org/openstack/openstack-ansible-os_magnum
+#   version: 313b15f9a6fa821fd85294b7411103f8452e902c

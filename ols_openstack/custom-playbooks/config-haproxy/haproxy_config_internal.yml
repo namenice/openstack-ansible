@@ -1,0 +1,353 @@
+---
+haproxy_ssl: true
+haproxy_user_ssl_cert: "{{ path_ssl_cert }}"
+haproxy_user_ssl_key: "{{ path_ssl_key }}"
+haproxy_user_ssl_ca_cert: "{{ path_ssl_cert }}"
+
+haproxy_default_services:
+  - service:
+      haproxy_service_name: galera
+      haproxy_bind: "{{ [internal_lb_vip_address] }}"
+      haproxy_port: 3306
+      haproxy_balance_type: tcp
+      haproxy_timeout_client: 5000s
+      haproxy_timeout_server: 5000s
+      haproxy_bind:
+        - "{{ database_vip }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+        - "mysql-check user {{ galera_monitoring_user }}"
+      haproxy_whitelist_networks: "{{ haproxy_galera_whitelist_networks }}"
+#      Database Active-Backup
+      haproxy_backend_nodes: "{{ [groups['galera_all'][0]] | default([]) }}"  # list expected
+      haproxy_backup_nodes: "{{ groups['galera_all'][1:] | default([]) }}"
+#      Database Active-Active
+#      haproxy_backend_nodes: "{{ groups['galera_all'] | default([]) }}"  # list expected
+#      haproxy_balance_alg: source
+
+  - service:
+      haproxy_service_name: repo_git
+      haproxy_backend_nodes: "{{ groups['repo_all'] | default([]) }}"
+      haproxy_bind: "{{ [internal_lb_vip_address] }}"
+      haproxy_port: 9418
+      haproxy_balance_type: tcp
+      haproxy_backend_options:
+        - tcp-check
+      haproxy_whitelist_networks: "{{ haproxy_repo_git_whitelist_networks }}"
+
+  - service:
+      haproxy_service_name: repo_all
+      haproxy_backend_nodes: "{{ groups['repo_all'] | default([]) }}"
+      haproxy_bind: "{{ [internal_lb_vip_address] }}"
+      haproxy_port: 8181
+      haproxy_balance_type: http
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+
+  - service:
+      haproxy_service_name: repo_cache
+      haproxy_backend_nodes: "{{ [groups['repo_all'][0]] | default([]) }}"  # list expected
+      haproxy_backup_nodes: "{{ groups['repo_all'][1:] | default([]) }}"
+      haproxy_bind: "{{ [internal_lb_vip_address] }}"
+      haproxy_port: "{{ repo_pkg_cache_port }}"
+      haproxy_balance_type: http
+      haproxy_backend_options:
+        - "httpchk HEAD /acng-report.html"
+      haproxy_whitelist_networks: "{{ haproxy_repo_cache_whitelist_networks }}"
+
+  - service:
+      haproxy_service_name: glance_api
+      haproxy_backend_nodes: "{{ groups['glance_api'] | default([]) }}"
+      haproxy_ssl: False
+      haproxy_port: 9292
+      haproxy_balance_type: http
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk /healthcheck"
+
+  - service:
+      haproxy_service_name: keystone_service
+      haproxy_backend_nodes: "{{ groups['keystone_all'] | default([])  }}"
+      haproxy_port: 5000
+      haproxy_ssl: False
+      haproxy_balance_type: "http"
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+
+  - service:
+      haproxy_service_name: keystone_admin
+      haproxy_backend_nodes: "{{ groups['keystone_all'] | default([])  }}"
+      haproxy_port: 35357
+      haproxy_ssl: False
+      haproxy_balance_type: "http"
+      haproxy_balance_alg: source
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+      haproxy_whitelist_networks: "{{ haproxy_keystone_admin_whitelist_networks }}"
+
+  - service:
+      haproxy_service_name: neutron_server
+      haproxy_backend_nodes: "{{ groups['neutron_server'] | default([]) }}"
+      haproxy_port: 9696
+      haproxy_ssl: False
+      haproxy_balance_type: tcp
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "forwardfor"
+        - "httpchk"
+        - "httpchk GET /"
+
+  - service:
+      haproxy_service_name: nova_api_metadata
+      haproxy_backend_nodes: "{{ groups['nova_api_metadata'] | default([]) }}"
+      haproxy_port: 8775
+      haproxy_ssl: False
+      haproxy_balance_type: http
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+      haproxy_whitelist_networks: "{{ haproxy_nova_metadata_whitelist_networks }}"
+
+  - service:
+      haproxy_service_name: nova_api_os_compute
+      haproxy_backend_nodes: "{{ groups['nova_api_os_compute'] | default([]) }}"
+      haproxy_ssl: False
+      haproxy_port: 8774
+      haproxy_balance_type: http
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+
+  - service:
+      haproxy_service_name: nova_api_placement
+      haproxy_backend_nodes: "{{ groups['nova_api_placement'] | default([]) }}"
+      haproxy_ssl: False
+      haproxy_port: 8780
+      haproxy_balance_type: http
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+      haproxy_backend_httpcheck_options:
+        - "expect status 405"
+
+  - service:
+      haproxy_service_name: nova_console
+      haproxy_backend_nodes: "{{ groups['nova_console'] | default([]) }}"
+      haproxy_ssl: False
+      haproxy_port: "{{ hostvars[(groups['nova_console'] | default(['localhost']))[0] | default('localhost')]['nova_console_port'] | default(6082) }}"
+      haproxy_balance_type: http
+      haproxy_timeout_client: 60m
+      haproxy_timeout_server: 60m
+      haproxy_balance_alg: source
+#      haproxy_whitelist_networks: "{{ haproxy_galera_whitelist_networks }}"
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+      haproxy_backend_httpcheck_options:
+        - "expect status 404"
+
+  - service:
+      haproxy_service_name: cinder_api
+      haproxy_backend_nodes: "{{ groups['cinder_api'] | default([]) }}"
+      haproxy_ssl: False
+      haproxy_port: 8776
+      haproxy_balance_type: http
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+
+  - service:
+      haproxy_service_name: horizon
+      haproxy_backend_nodes: "{{ groups['horizon_all'] | default([]) }}"
+      haproxy_ssl: True
+      haproxy_ssl_all_vips: true
+#      haproxy_port: "{{ haproxy_ssl | ternary(443,80) }}"
+      haproxy_port: 443
+      haproxy_backend_port: 80
+      haproxy_redirect_http_port: 80
+      haproxy_balance_type: http
+      haproxy_balance_alg: source
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+
+  - service:
+      haproxy_service_name: heat
+      haproxy_backend_nodes: "{{ groups['heat_api'] | default([]) }}"
+      haproxy_port: 8004
+      haproxy_balance_type: http
+      haproxy_balance_alg: leastconn
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "forwardfor"
+#        - "httpchk /status"
+        - "httpchk HEAD /"
+        - "httplog"
+#      haproxy_backend_httpcheck_options:
+#        - "expect status 200"
+
+  - service:
+      haproxy_service_name: heat-watch
+      haproxy_backend_nodes: "{{ groups['heat_api'] | default([]) }}"
+      haproxy_port: 8003
+      haproxy_balance_type: http
+      haproxy_balance_alg: leastconn
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "forwardfor"
+        - "httpchk HEAD /"
+        - "httplog"
+
+  - service:
+      haproxy_service_name: heat-cfn
+      haproxy_backend_nodes: "{{ groups['heat_api'] | default([]) }}"
+      haproxy_port: 8000
+      haproxy_balance_type: http
+      haproxy_balance_alg: leastconn
+      haproxy_bind:
+        - "{{ internal_lb_vip_address }}"
+      haproxy_backend_options:
+        - "forwardfor"
+#        - "httpchk /status"
+#        - "httplog"
+        - "httpchk HEAD /"
+        - "httplog"
+#      haproxy_backend_httpcheck_options:
+#        - "expect status 200"
+
+  - service:
+      haproxy_service_name: monitor-haproxy
+      haproxy_backend_nodes: "{{ groups['haproxy_hosts'] | default([]) }}"
+      haproxy_port: 9101
+      haproxy_backend_port: 9101
+      haproxy_balance_type: http
+      haproxy_balance_alg: source
+      haproxy_bind:
+        - "{{ monlog_vip }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+      haproxy_backend_httpcheck_options:
+        - "expect status 200"
+  - service:
+      haproxy_service_name: mysql-exporter
+      haproxy_backend_nodes: "{{ groups['haproxy_hosts'] | default([]) }}"
+      haproxy_port: 9102
+      haproxy_backend_port: 9102
+      haproxy_balance_type: http
+      haproxy_balance_alg: source
+      haproxy_bind:
+        - "{{ monlog_vip }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+      haproxy_backend_httpcheck_options:
+        - "expect status 200"
+  - service:
+      haproxy_service_name: rabbitmq_mgmt
+      haproxy_backend_nodes: "{{ groups['rabbitmq'] | default([]) }}"
+      haproxy_ssl: False
+      haproxy_port: 15672
+      haproxy_balance_type: http
+      haproxy_bind:
+        - "{{ monlog_vip }}"
+      haproxy_backend_options:
+        - "httpchk HEAD /"
+      haproxy_whitelist_networks: "{{ haproxy_rabbitmq_management_whitelist_networks }}"
+
+
+
+
+
+
+
+
+  # - service:
+  #     haproxy_service_name: rabbitmq_mgmt
+  #     haproxy_backend_nodes: "{{ groups['rabbitmq'] | default([]) }}"
+  #     haproxy_ssl: False
+  #     haproxy_port: 15672
+  #     haproxy_balance_type: http
+  #     haproxy_bind:
+  #       - "{{ monitor_vip }}"
+  #     haproxy_backend_options:
+  #       - "httpchk HEAD /"
+  #     haproxy_whitelist_networks: "{{ haproxy_rabbitmq_management_whitelist_networks }}"
+#  - service:
+#      haproxy_service_name: rgw_internal_proxy
+#      haproxy_backend_nodes: "{{ groups['ceph-rgw'] | default([]) }}"
+#      haproxy_ssl: False
+#      haproxy_balance_alg: source
+#      haproxy_port: 80
+#      haproxy_backend_port: 9000
+#      haproxy_balance_type: http
+#      haproxy_bind:
+#        - "{{swift_internal_vip}}"
+#      haproxy_backend_options:
+#        - "httpchk HEAD /"
+#      haproxy_backend_httpcheck_options:
+#        - "expect status 200"
+#  - service:
+#      haproxy_service_name: ceph-mgr
+#      haproxy_backend_nodes: "{{ groups['ceph-mon'] | default([]) }}"
+#      haproxy_port: 7000
+#      haproxy_backend_port: 7000
+#      haproxy_balance_type: http
+#      haproxy_balance_alg: source
+#      haproxy_bind:
+#        - "{{ internal_lb_vip_address }}"
+#      haproxy_backend_options:
+#        - "httpchk HEAD /"
+#      haproxy_backend_httpcheck_options:
+#        - "expect status 200"
+#  - service:
+#      haproxy_service_name: ceph-prometheus
+#      haproxy_backend_nodes: "{{ groups['ceph-mon'] | default([]) }}"
+#      haproxy_port: 9283
+#      haproxy_backend_port: 9283
+#      haproxy_balance_type: http
+#      haproxy_balance_alg: source
+#      haproxy_bind:
+#        - "{{ monitor_vip }}"
+#      haproxy_backend_options:
+#        - "httpchk HEAD /"
+#      haproxy_backend_httpcheck_options:
+#        - "expect status 200"
+#   - service:
+#       haproxy_service_name: haproxy-prometheus
+#       haproxy_backend_nodes: "{{ groups['haproxy_hosts'] | default([]) }}"
+#       haproxy_port: 9101
+#       haproxy_backend_port: 9101
+#       haproxy_balance_type: http
+#       haproxy_balance_alg: source
+#       haproxy_bind:
+#         - "{{ monitor_vip }}"
+#       haproxy_backend_options:
+#         - "httpchk HEAD /"
+#       haproxy_backend_httpcheck_options:
+#         - "expect status 200"
+#   - service:
+#       haproxy_service_name: mysql-exporter
+#       haproxy_backend_nodes: "{{ groups['haproxy_hosts'] | default([]) }}"
+#       haproxy_port: 9102
+#       haproxy_backend_port: 9102
+#       haproxy_balance_type: http
+#       haproxy_balance_alg: source
+#       haproxy_bind:
+#         - "{{ monitor_vip }}"
+#       haproxy_backend_options:
+#         - "httpchk HEAD /"
+#       haproxy_backend_httpcheck_options:
+#         - "expect status 200"

@@ -2,11 +2,11 @@
 controllerHostName: controller
 computeHostName: compute
 networkHostName: controller
-#proxyHostName: proxy
+proxyExternalHostName: proxy
 
 controllerIP:
   - 10.11.13.10
-  - 10.11.13.12 
+  - 10.11.13.12
 
 computeIP:
   - 10.11.13.20
@@ -16,8 +16,7 @@ networkIP:
   - 10.11.13.10
   - 10.11.13.12
 
-proxyIP:
+proxyExternalIP:
   - 10.11.13.10
   - 10.11.13.12
-
 
