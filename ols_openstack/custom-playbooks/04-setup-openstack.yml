@@ -6,7 +6,7 @@
 - include: ../../openstack-ansible/playbooks/os-cinder-install.yml
 - include: ../../openstack-ansible/playbooks/os-nova-install.yml
 - include: ../../openstack-ansible/playbooks/os-neutron-install.yml
-- include: setup-ovs.yml
+- include: ./playbook/ovs/setup-ovs.yml
 - include: ../../openstack-ansible/playbooks/os-heat-install.yml
 - include: ../../openstack-ansible/playbooks/os-horizon-install.yml
    #- include: ../../openstack-ansible/playbooks/os-ceilometer-install.yml

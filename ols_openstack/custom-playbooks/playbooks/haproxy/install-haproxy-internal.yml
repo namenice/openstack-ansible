@@ -18,8 +18,8 @@
   gather_facts: "{{ gather_facts | default(True) }}"
   user: root
   pre_tasks:
-    - include: ../../openstack-ansible/playbooks/common-tasks/os-lxc-container-setup.yml
-    - include: ../../openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+    - include: ../../../../openstack-ansible/playbooks/common-tasks/os-lxc-container-setup.yml
+    - include: ../../../../openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-haproxy"
@@ -75,7 +75,7 @@
       tags:
         - rsyslog
   post_tasks:
-    - include: ../../openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+    - include: ../../../../openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   vars_files:
     - config-haproxy/haproxy_config_internal.yml
   vars:

@@ -1,13 +1,13 @@
 ---
 
-- include: ../openstack-ansible/playbooks/unbound-install.yml
+- include: ../../openstack-ansible/playbooks/unbound-install.yml
 - include: ../../openstack-ansible/playbooks/repo-install.yml
-- include: install-haproxy-internal.yml
-- include: install-haproxy-external.yml
+- include: ./playbooks/haproxy/install-haproxy-internal.yml
+- include: ./playbooks/haproxy/install-haproxy-external.yml
 - include: ../../openstack-ansible/playbooks/memcached-install.yml
 - include: ../../openstack-ansible/playbooks/galera-install.yml
 - include: ../../openstack-ansible/playbooks/rabbitmq-install.yml
-#- include: ../openstack-ansible/playbooks/etcd-install.yml
+#- include: ../../openstack-ansible/playbooks/etcd-install.yml
 #- include: ../../openstack-ansible/playbooks/ceph-install.yml
 - include: ../../openstack-ansible/playbooks/utility-install.yml
-- include: ../../openstack-ansible/playbooks/rsyslog-install.yml
+#- include: ../../openstack-ansible/playbooks/rsyslog-install.yml

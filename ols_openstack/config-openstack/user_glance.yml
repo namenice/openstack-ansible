@@ -1,9 +1,0 @@
----
-glance_glance_api_conf_overrides:
-  DEFAULT:
-    image_size_cap: 2199023255552
-glance_show_image_direct_url: True
-glance_show_multiple_locations: True 
-
-## Override dictionary for unit file
-config_overrides: "{}"     
