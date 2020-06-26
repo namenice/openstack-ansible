@@ -1,0 +1,38 @@
+---
+controllerHostName: controller
+computeHostName: compute
+networkHostName: controller
+proxyExternalHostName: proxy
+
+lxc_container_domain: "dev.local"
+internal_lb_vip_address: 10.2.0.200
+external_lb_vip_address: 103.138.176.222
+
+controllerIP:
+  - 10.11.13.10
+
+computeIP:
+  - 10.11.13.20
+
+networkIP:
+  - 10.11.13.10
+
+proxyExternalIP:
+  - 10.11.13.178
+
+
+
+
+cidr_networks:
+  - container: 10.2.0.0/23  # br-mgmt
+  - tunnel: 10.3.0.0/24     # br-vxlan
+  - storage: 10.4.0.0/24    # br-storage
+  - monitor: 10.5.0.0/24    # br-monlog
+
+used_ips:
+  - "10.2.0.1,10.2.0.159"
+  - "10.3.0.1,10.3.0.159"
+  - "10.4.0.1,10.4.0.159"
+  - "10.5.0.1,10.5.0.159"
+
+

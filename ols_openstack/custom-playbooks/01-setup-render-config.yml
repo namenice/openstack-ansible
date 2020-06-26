@@ -1,7 +1,12 @@
 - hosts: 127.0.0.1
   vars_files:
-    - ../config-openstack/user_01_ip.yml
+    - ../config-openstack/user_02_host_ip.yml
   tasks:
+
+  - name: Creating openstack_user_config
+    template:
+      src: ./00-opesntack-user-config/opesntack-user-config.j2
+      dest: ./00-file/opesntack-user-config.yml
 
   - name: Creating shared-infra_hosts
     template:
