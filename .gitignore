@@ -1,1 +1,3 @@
 openstack-ansible/*
+ols_openstack/ansible-role-requirements*
+
